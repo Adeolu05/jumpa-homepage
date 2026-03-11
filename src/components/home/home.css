@@ -92,7 +92,7 @@
 
 /* Service Grid */
 .service-grid {
-  width: 342px;
+  width: 100%;
   height: 96px;
   display: flex;
   align-items: center;
@@ -163,7 +163,7 @@
 }
 /* Quick Transfer */
 .quick-transfer {
-  width: 342px;
+  width: 100%;
   height: 134px;
   background: #2D2D2D;
   border-radius: 16px;

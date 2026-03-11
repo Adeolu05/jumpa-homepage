@@ -112,13 +112,15 @@ body {
 
 /* Responsive full-screen app container */
 .phone-frame {
-  width: 100vw;
+  width: 100%;
+  max-width: 450px; /* Standard mobile width for desktop viewing */
   height: 100vh;
-  height: 100dvh; /* For mobile browsers with dynamic UI */
+  height: 100dvh;
   background: var(--bg-app);
   position: relative;
   overflow: hidden;
-  /* Removed fixed sizing and border radius wrappers */
+  margin: 0 auto;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
 }
 
 

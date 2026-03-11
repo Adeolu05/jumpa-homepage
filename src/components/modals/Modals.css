@@ -70,9 +70,8 @@
    ============================================ */
 
 .modal-wallet-list {
-  height: 642px;
-  max-height: 76%;
-  min-height: 0;
+  max-height: 85%;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
@@ -288,17 +287,24 @@
 
 .virtual-modal-card {
   position: absolute;
-  top: 285px;
-  left: 24px;
-  width: 342px;
-  height: 274px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 342px;
+  min-height: 274px;
   background: var(--bg-modal);
   border-radius: var(--radius-xl);
   z-index: 60;
-  animation: fadeInUp var(--transition-slow) forwards;
+  animation: modalScaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+@keyframes modalScaleIn {
+  from { opacity: 0; transform: translate(-50%, -45%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 .virtual-close {
@@ -349,8 +355,9 @@
 }
 
 .virtual-modal-desc {
-  width: 300px;
-  height: 54px;
+  width: 100%;
+  max-width: 300px;
+  min-height: 54px;
   background: #F0EEFA;
   border: 1px dashed #C4B8F0;
   border-radius: var(--radius-sm);
