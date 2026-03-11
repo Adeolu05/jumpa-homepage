@@ -1,0 +1,10 @@
+.home-page {
+  padding: 0 var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-base);
+}
+
+.home-bottom-spacer {
+  height: 80px;
+}

@@ -1,0 +1,392 @@
+/* ============================================
+   Modals — Shared Styles
+   ============================================ */
+
+/* Bottom sheet */
+.modal-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-modal);
+  border-radius: var(--radius-modal) var(--radius-modal) 0 0;
+  padding: var(--space-lg) var(--space-base) var(--space-2xl);
+  z-index: 60;
+  animation: slideUp var(--transition-slow) forwards;
+  max-height: 75%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.modal-sheet::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex: 1;
+  text-align: center;
+}
+
+.modal-subtitle {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-surface-2);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: var(--bg-surface-3);
+}
+
+.modal-close img {
+  opacity: 0.7;
+}
+
+/* ============================================
+   Wallet List Modal
+   ============================================ */
+
+.modal-wallet-list {
+  height: 642px;
+  max-height: 76%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.wallet-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: 25px; /* Added to reach ~59px total distance from subtitle since subtitle has margin-bottom: var(--space-lg) (32px) */
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-2xl);
+}
+
+.wallet-list::-webkit-scrollbar {
+  display: none;
+}
+
+.wallet-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-base);
+  background: var(--bg-surface-1);
+  border-radius: var(--radius-btn);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: background var(--transition-fast);
+  width: 100%;
+}
+
+.wallet-row:hover {
+  background: var(--bg-surface-2);
+}
+
+.wallet-row-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.wallet-delete-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.wallet-row-orb {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.wallet-row-copy {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+}
+
+.wallet-row-copy:hover {
+  opacity: 0.8;
+}
+
+.wallet-row-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.wallet-row-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.wallet-row-addr {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.wallet-row-balance {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* ============================================
+   Wallet Details Modal
+   ============================================ */
+
+.modal-details {
+  text-align: center;
+}
+
+.details-hero {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-lg) 0;
+}
+
+.details-coin-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.details-coin-icon span {
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.details-address-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--bg-surface-1);
+  border-radius: var(--radius-btn);
+  padding: var(--space-md) var(--space-base);
+  margin: var(--space-base) 0;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.details-address-box:hover {
+  background: var(--bg-surface-2);
+}
+
+.details-address {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.details-copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.copy-toast {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--success);
+  margin-bottom: var(--space-sm);
+  animation: fadeIn var(--transition-fast) forwards;
+}
+
+.details-section {
+  text-align: left;
+  margin-top: var(--space-lg);
+}
+
+.details-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.details-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-base);
+  background: var(--bg-surface-1);
+  border-radius: var(--radius-btn);
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: background var(--transition-fast);
+}
+
+.details-key-row:hover {
+  background: var(--bg-surface-2);
+}
+
+.details-key-row img {
+  opacity: 0.5;
+}
+
+/* ============================================
+   Virtual Account Modal
+   ============================================ */
+
+.virtual-modal-card {
+  position: absolute;
+  top: 285px;
+  left: 24px;
+  width: 342px;
+  height: 274px;
+  background: var(--bg-modal);
+  border-radius: var(--radius-xl);
+  z-index: 60;
+  animation: fadeInUp var(--transition-slow) forwards;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.virtual-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-surface-2);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+  transition: background var(--transition-fast);
+}
+
+.virtual-close:hover {
+  background: var(--bg-surface-3);
+}
+
+.virtual-close img {
+  opacity: 0.7;
+}
+
+.virtual-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-xl) var(--space-lg);
+  flex: 1;
+  justify-content: center;
+}
+
+.virtual-graphic {
+  width: 60px;
+  height: 58.37px;
+  margin-top: 8.3px;
+  margin-bottom: var(--space-lg);
+}
+
+.virtual-graphic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.virtual-modal-desc {
+  width: 300px;
+  height: 54px;
+  background: #F0EEFA;
+  border: 1px dashed #C4B8F0;
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-family: 'Geist', var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  color: #6A59CE;
+  line-height: 145%;
+  letter-spacing: -0.02em;
+  text-align: left;
+  margin-bottom: var(--space-lg);
+}
+
+.virtual-modal-cta {
+  width: 58px;
+  height: 27px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-500);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: all var(--transition-fast);
+}
+
+.virtual-modal-cta:hover {
+  background: var(--primary-400);
+}
+
+.virtual-modal-cta:active {
+  transform: scale(0.98);
+}
