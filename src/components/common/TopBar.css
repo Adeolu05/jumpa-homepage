@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-base) var(--space-lg);
-  padding-top: var(--space-lg);
+  padding: 12px 20px;
+  background-color: var(--bg-app);
 }
 
 .top-bar-left,

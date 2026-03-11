@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import StatusBar from './components/common/StatusBar';
+
 import TopBar from './components/common/TopBar';
 import SideDrawer from './components/drawer/SideDrawer';
 import HomePage from './pages/home/HomePage';
@@ -76,7 +76,6 @@ function App() {
 
   return (
     <div className="phone-frame">
-      <StatusBar />
 
       {/* Main content */}
       {pinScreenOpen ? (
