@@ -128,7 +128,8 @@
   background: var(--bg-surface-1);
   border-radius: var(--radius-modal);
   padding: var(--space-xl);
-  width: 340px;
+  width: 90%;
+  max-width: 340px;
   animation: fadeInUp var(--transition-slow) forwards;
 }
 .services-screen-header {
