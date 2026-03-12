@@ -1,7 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import './Pin.css';
 import NumericKeyboard from './NumericKeyboard';
 import closeIcon from '../../assets/icons/actions/close.svg';
+import dropIcon from '../../assets/icons/actions/drop.svg';
+import codeIcon from '../../assets/icons/actions/code.svg';
 
 const CORRECT_PIN = '1234';
 
@@ -9,6 +11,18 @@ function PinEntryScreen({ onSuccess, onClose }) {
   const [pin, setPin] = useState('');
   const [status, setStatus] = useState('idle'); // idle | typing | error | success
   const [shake, setShake] = useState(false);
+  
+  // Drag to dismiss logic
+  const touchStartY = useRef(0);
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+  const handleTouchEnd = (e) => {
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    if (deltaY > 50) { // Threshold for dismissal
+      onClose();
+    }
+  };
 
   const handleKeyPress = useCallback((key) => {
     if (status === 'success') return;
@@ -48,34 +62,49 @@ function PinEntryScreen({ onSuccess, onClose }) {
 
   const getDotClass = (index) => {
     const filled = index < pin.length;
-    if (status === 'error') return 'pin-dot error';
-    if (status === 'success') return 'pin-dot success';
-    if (filled) return 'pin-dot filled';
-    return 'pin-dot';
+    let baseClass = 'pin-dot';
+    if (status === 'error' && pin.length === 4) baseClass += ' error';
+    if (status === 'success') baseClass += ' success';
+    if (filled) baseClass += ' filled';
+    return baseClass;
   };
 
   return (
-    <div className="pin-screen">
-      <div className="pin-header">
-        <button className="pin-close" onClick={onClose} aria-label="Close">
-          <img src={closeIcon} alt="" width="20" height="20" />
-        </button>
-      </div>
+    <div className="pin-screen-container" onClick={onClose}>
+      <div className="pin-screen" onClick={(e) => e.stopPropagation()}>
+        <div 
+          className="pin-drag-handle"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <img src={dropIcon} alt="" />
+        </div>
 
-      <div className="pin-content">
-        <h2 className="pin-title">Enter your pin</h2>
-        <div className={`pin-dots ${shake ? 'shake' : ''}`}>
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className={getDotClass(i)} />
-          ))}
+        <div className="pin-header">
+          <button className="pin-close" onClick={onClose} aria-label="Close">
+            <img src={closeIcon} alt="" />
+          </button>
+        </div>
+
+        <div className="pin-content">
+          <h2 className="pin-title">Enter your pin</h2>
+          <div className={`pin-dots ${shake ? 'shake' : ''}`}>
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className={getDotClass(i)}>
+                {i < pin.length && <img src={codeIcon} alt="" className="pin-code-icon" />}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="num-keyboard-section">
+          <div className="num-keyboard-header">
+             <span className="num-keyboard-label">Jumpa Secure Numeric Keypad</span>
+             <button className="num-keyboard-done" onClick={onClose}>Done</button>
+          </div>
+          <NumericKeyboard onKeyPress={handleKeyPress} />
         </div>
       </div>
-
-      <div className="pin-hint">
-        <span>Jumpa Secure Payment Request</span>
-      </div>
-
-      <NumericKeyboard onKeyPress={handleKeyPress} />
     </div>
   );
 }

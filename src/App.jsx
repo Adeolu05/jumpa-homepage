@@ -4,6 +4,7 @@ import TopBar from './components/common/TopBar';
 import SideDrawer from './components/drawer/SideDrawer';
 import HomePage from './pages/home/HomePage';
 import DAppPage from './pages/dapp/DAppPage';
+import TradePage from './pages/trade/TradePage';
 import WalletListModal from './components/modals/WalletListModal';
 import WalletDetailsModal from './components/modals/WalletDetailsModal';
 import VirtualAccountModal from './components/modals/VirtualAccountModal';
@@ -77,18 +78,6 @@ function App() {
   return (
     <div className="phone-frame">
 
-      {/* Main content */}
-      {pinScreenOpen ? (
-        <PinEntryScreen
-          onSuccess={handlePinSuccess}
-          onClose={() => { setPinScreenOpen(false); setPinWallet(null); }}
-        />
-      ) : privateKeyOpen ? (
-        <PrivateKeyScreen
-          wallet={privateKeyData}
-          onDone={handlePrivateKeyDone}
-        />
-      ) : (
         <>
           <div className="app-content">
             <TopBar
@@ -108,11 +97,29 @@ function App() {
             )}
 
             {currentPage === 'dapp' && <DAppPage />}
+            {currentPage === 'trade' && <TradePage />}
           </div>
 
-          <FloatingSupportButton />
+          {currentPage === 'home' && <FloatingSupportButton />}
+
+          {/* PIN entry overlay */}
+          {pinScreenOpen && (
+            <PinEntryScreen
+              onSuccess={handlePinSuccess}
+              onClose={() => { setPinScreenOpen(false); setPinWallet(null); }}
+            />
+          )}
+
+          {/* Private key screen (fullscreen replaces content) */}
+          {privateKeyOpen && (
+            <div className="fullscreen-overlay">
+              <PrivateKeyScreen
+                wallet={privateKeyData}
+                onDone={handlePrivateKeyDone}
+              />
+            </div>
+          )}
         </>
-      )}
 
       {/* Drawer overlay */}
       {drawerOpen && (
@@ -130,7 +137,7 @@ function App() {
       {/* Modal overlay */}
       {(walletListOpen || selectedWallet || virtualAccountOpen) && !drawerOpen && (
         <div
-          className={(walletListOpen || virtualAccountOpen) ? 'overlay-blur' : 'overlay'}
+          className="overlay-blur"
           onClick={handleCloseAll}
         />
       )}

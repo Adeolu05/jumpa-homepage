@@ -30,7 +30,7 @@ function WalletSelectorCard({ onDropdown }) {
         </div>
       </div>
       <button className="wallet-dropdown-btn" onClick={onDropdown} aria-label="Switch wallet">
-        <img src={chevronDown} alt="" width="16" height="16" />
+        <img src={chevronDown} alt="" width="10.21" height="6.44" />
       </button>
     </div>
   );

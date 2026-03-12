@@ -3,9 +3,11 @@ import './Modals.css';
 import closeIcon from '../../assets/icons/actions/close.svg';
 import copyIcon from '../../assets/icons/actions/copy.svg';
 import chevronRight from '../../assets/icons/actions/chevron-right.svg';
+import walletIcon from '../../assets/images/illustrations/wallet.png';
 
 function WalletDetailsModal({ wallet, onClose, onPrivateKey }) {
   const [copied, setCopied] = useState(false);
+  const [showFullAddress, setShowFullAddress] = useState(false);
 
   const handleCopyAddress = async () => {
     try {
@@ -19,20 +21,15 @@ function WalletDetailsModal({ wallet, onClose, onPrivateKey }) {
 
   return (
     <div className="modal-sheet modal-details" onClick={(e) => e.stopPropagation()}>
-      <div className="modal-header">
-        <div style={{ width: 32 }} />
-        <button className="modal-close" onClick={onClose} aria-label="Close">
-          <img src={closeIcon} alt="" width="18" height="18" />
-        </button>
-      </div>
+      <button className="modal-close details-close" onClick={onClose} aria-label="Close">
+        <img src={closeIcon} alt="" width="11.72" height="11.72" />
+      </button>
 
       <div className="details-hero">
-        <div
-          className="details-coin-icon"
-          style={{ background: wallet.color }}
-        >
-          <span>{wallet.symbol.charAt(0)}</span>
+        <div className="details-card-avatar">
+          <img src={walletIcon} alt="" />
         </div>
+        <h3 className="details-wallet-name">{wallet.fullAddress.substring(0, 6)}...{wallet.fullAddress.substring(wallet.fullAddress.length - 4)}</h3>
       </div>
 
       <div className="details-address-box" onClick={handleCopyAddress}>
