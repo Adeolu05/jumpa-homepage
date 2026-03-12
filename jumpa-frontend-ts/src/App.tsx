@@ -1,108 +1,209 @@
+import { useState, useCallback } from "react";
+import { Routes, Route, BrowserRouter, useNavigate } from "react-router-dom";
 import "./App.css";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Layout from "@/components/ui/layout";
-import { CreateAccountForm, ForgotPasswordEmailForm, Landing, LoginForm, NoMatch, Onboarding, VerifyAccountForm, VerificationSuccess, VerificationFailed, VerificationFailedForm, LoanDashboard, LoanRequestSuccess, LoanNotification, SavingsOnboarding, SavingsDashboard, Loan, Savings, Verification, SavingsTargetDashboard, SavingsTargetForm, SavingsSummary, SavingsNotification, SavingsTargetSuccess, AiDashboard, DriverNotification, Withdraw, SetPinWithdraw, WithdrawBankDetails, WithdrawSendMoney, Settings, SettingsHome, SettingsProfile, PaymentSettings, ChangePaymentPin, WithdrawCryptoAsset, Investment, InvestmentHome, AirtimeFlow, GroupFlow } from "./pages";
-import SelectCryptoAsset from "./pages/home/withdraw/crypto/select-crypto";
-import LoginSuccess from "./pages/auth/login/login-sucess";
-import VerifyEmail from "./pages/auth/forgot-password/verification";
-import JumpaDashboard from "./pages/home/dashboard";
-import ImportOptions from "./pages/home/create-account/import-options";
-import SaveRecoveryPhrase from "./pages/home/create-account/save-recovery";
-import ImportPrivateKey from "./pages/home/create-account/private-key";
-import Notifications from "./pages/home/create-account/notifications";
-import SendMoneyFlow from "./pages/send";
 
+// Layout & Pages (Original)
+import Layout from "./components/ui/layout";
+import { 
+  Landing, 
+  Onboarding, 
+  LoginForm, 
+  SavingsDashboard, 
+  LoanDashboard, 
+  AiDashboard,
+  SettingsHome,
+  WithdrawOptions
+} from "./pages";
+
+// Components (Premium)
+import TopBar from "./components/common/TopBar";
+import SideDrawer from "./components/ui/SideDrawer";
+import JumpaDashboard from "./pages/home/dashboard";
+import TradePage from "./pages/home/subpages/TradePage";
+import DAppPage from "./pages/home/subpages/DAppPage";
+import WalletListModal from "./components/modal/WalletListModal";
+import WalletDetailsModal from "./components/modal/WalletDetailsModal";
+import VirtualAccountModal from "./components/modal/VirtualAccountModal";
+import PinEntryScreen from "./components/pin/PinEntryScreen";
+import PrivateKeyScreen from "./components/wallet/PrivateKeyScreen";
+import FloatingSupportButton from "./components/common/FloatingSupportButton";
+
+// Data
+import { type Wallet } from "./data/wallets";
+
+function AppContent() {
+  const navigate = useNavigate();
+
+  // Navigation State
+  const [currentPage, setCurrentPage] = useState("home");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Home state
+  const [balanceHidden, setBalanceHidden] = useState(false);
+
+  // Modals
+  const [walletListOpen, setWalletListOpen] = useState(false);
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
+  const [virtualAccountOpen, setVirtualAccountOpen] = useState(false);
+
+  // PIN & Private key flow
+  const [pinScreenOpen, setPinScreenOpen] = useState(false);
+  const [pinWallet, setPinWallet] = useState<Wallet | null>(null);
+  const [privateKeyOpen, setPrivateKeyOpen] = useState(false);
+  const [privateKeyData, setPrivateKeyData] = useState<Wallet | null>(null);
+
+  // Withdrawal flow
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
+
+  const handleNavigate = useCallback((pageId: string) => {
+    setCurrentPage(pageId);
+    setDrawerOpen(false);
+    if (pageId === "home") navigate("/home");
+  }, [navigate]);
+
+  const handleWalletSelect = useCallback((wallet: Wallet) => {
+    setSelectedWallet(wallet);
+    setWalletListOpen(false);
+  }, []);
+
+  const handlePrivateKeyRequest = useCallback((wallet: Wallet) => {
+    setPinWallet(wallet);
+    setSelectedWallet(null);
+    setPinScreenOpen(true);
+  }, []);
+
+  const handlePinSuccess = useCallback(() => {
+    setPinScreenOpen(false);
+    setPrivateKeyData(pinWallet);
+    setPrivateKeyOpen(true);
+  }, [pinWallet]);
+
+  return (
+    <>
+      <Routes>
+        {/* Public Routes with Original Layout */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Landing />} />
+        </Route>
+
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/login" element={<LoginForm />} />
+
+        {/* Auth/Home Routes in Premium Phone Frame */}
+        <Route
+          path="/home/*"
+          element={
+            <div className="phone-frame" style={{ fontFamily: "Geist" }}>
+              <div className="app-content">
+                <TopBar onMenuClick={() => setDrawerOpen(true)} />
+
+                <Routes>
+                  <Route
+                    index
+                    element={
+                      currentPage === "home" ? (
+                        <JumpaDashboard
+                          hasTransactionHistory={true}
+                          balanceHidden={balanceHidden}
+                          onToggleBalance={() => setBalanceHidden(!balanceHidden)}
+                          onWalletDropdown={() => setWalletListOpen(true)}
+                          onVirtualAccount={() => setVirtualAccountOpen(true)}
+                          onWithdrawal={() => setWithdrawOpen(true)}
+                          onTrade={() => setCurrentPage("trade")}
+                          onDApp={() => setCurrentPage("dapp")}
+                        />
+                      ) : currentPage === "dapp" ? (
+                        <DAppPage />
+                      ) : (
+                        <TradePage />
+                      )
+                    }
+                  />
+                  
+                  {/* Original Feature Routes integrated into the home flow */}
+                  <Route path="savings" element={<SavingsDashboard />} />
+                  <Route path="loans" element={<LoanDashboard />} />
+                  <Route path="ai" element={<AiDashboard />} />
+                  <Route path="settings" element={<SettingsHome />} />
+                </Routes>
+              </div>
+
+              {currentPage === "home" && !privateKeyOpen && !pinScreenOpen && <FloatingSupportButton />}
+
+              {/* Overlays */}
+              <WithdrawOptions isOpen={withdrawOpen} onClose={() => setWithdrawOpen(false)} />
+              
+              {pinScreenOpen && (
+                <PinEntryScreen
+                  onSuccess={handlePinSuccess}
+                  onClose={() => { setPinScreenOpen(false); setPinWallet(null); }}
+                />
+              )}
+
+              {privateKeyOpen && (
+                <div className="fullscreen-overlay">
+                  <PrivateKeyScreen
+                    wallet={privateKeyData}
+                    onDone={() => {
+                      setPrivateKeyOpen(false);
+                      setPrivateKeyData(null);
+                      setPinWallet(null);
+                    }}
+                  />
+                </div>
+              )}
+
+              {drawerOpen && (
+                <div className="overlay" onClick={() => setDrawerOpen(false)} />
+              )}
+
+              <SideDrawer
+                isOpen={drawerOpen}
+                currentPage={currentPage}
+                onNavigate={handleNavigate}
+                onClose={() => setDrawerOpen(false)}
+              />
+
+              {(walletListOpen || selectedWallet || virtualAccountOpen) && !drawerOpen && (
+                <div className="overlay-blur" onClick={() => {
+                  setWalletListOpen(false);
+                  setSelectedWallet(null);
+                  setVirtualAccountOpen(false);
+                }} />
+              )}
+
+              {walletListOpen && (
+                <WalletListModal
+                  onSelect={handleWalletSelect}
+                  onClose={() => setWalletListOpen(false)}
+                />
+              )}
+
+              {selectedWallet && (
+                <WalletDetailsModal
+                  wallet={selectedWallet}
+                  onClose={() => setSelectedWallet(null)}
+                  onPrivateKey={handlePrivateKeyRequest}
+                />
+              )}
+
+              {virtualAccountOpen && (
+                <VirtualAccountModal
+                  onClose={() => setVirtualAccountOpen(false)}
+                />
+              )}
+            </div>
+          }
+        />
+      </Routes>
+    </>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
-      <div style={{ fontFamily: "Geist" }}>
-        <Routes>
-
-          {/* auth */}
-          <Route path="/create-account" element={<CreateAccountForm />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/login-success" element={<LoginSuccess />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/forgot-password-email" element={<ForgotPasswordEmailForm />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/import-options" element={<ImportOptions />} />
-          <Route path="/save-recovery" element={<SaveRecoveryPhrase />} />
-          <Route path="/private-keys" element={<ImportPrivateKey />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/send" element={<SendMoneyFlow />} />
-          {/* Shared layout (Navbar + Footer are inside Layout) */}
-          <Route element={<Layout />}>
-            <Route path="/" element={<Landing />} />
-          </Route>
-
-          {/* Driver */}
-          <Route path="/home">
-            <Route index element={<JumpaDashboard />} />
-            <Route path="3rikeAi" element={<AiDashboard />} />
-             <Route path="airtime" element={<AirtimeFlow/>} />
-             <Route path="group" element={<GroupFlow/>} />
-            <Route path="notification" element={<DriverNotification />} />
-            {/* Verification routes */}
-            <Route path="verification" element={<Verification />}>
-              <Route index element={<VerifyAccountForm />} />
-              <Route path="success" element={<VerificationSuccess />} />
-              <Route path="failed" element={<VerificationFailed />} />
-              <Route path="retry" element={<VerificationFailedForm />} />
-            </Route>
-
-            {/* Loan routes */}
-            <Route path="loan" element={<Loan />}>
-              <Route index element={<LoanDashboard />} />
-              <Route path="submitted" element={<LoanRequestSuccess />} />
-              <Route path="notification" element={<LoanNotification />} />
-            </Route>
-
-            {/* Withdraw routes */}
-            <Route path="withdraw" element={<Withdraw />}>
-              <Route index element={<SetPinWithdraw />} />
-              <Route path="bank-details" element={<WithdrawBankDetails />} />
-              <Route path="send-money" element={<WithdrawSendMoney />} />
-              <Route path="crypto" element={<SelectCryptoAsset />} />
-              <Route path="crypto-withdraw" element={<WithdrawCryptoAsset />} />
-            </Route>
-
-            {/* Savings route */}
-            <Route path="savings" element={<Savings />}>
-              <Route index element={<SavingsOnboarding />} />
-              <Route path="dashboard" element={<SavingsDashboard />} />
-              <Route path="target" element={<SavingsTargetDashboard />} />
-              <Route path="create-target" element={<SavingsTargetForm />} />
-              <Route path="summary" element={<SavingsSummary />} />
-              <Route path="notification" element={<SavingsNotification />} />
-              <Route path="success" element={<SavingsTargetSuccess />} />
-            </Route>
-
-            {/* Investment route */}
-            <Route path="investment" element={<Investment />}>
-              <Route index element={<InvestmentHome />} />
-            </Route>
-
-            {/* Settings route */}
-            <Route path="settings" element={<Settings />}>
-              <Route index element={<SettingsHome />} />
-              <Route path="profile" element={<SettingsProfile />} />
-              <Route path="payment" element={<PaymentSettings />} />
-              <Route path="change-pin" element={<ChangePaymentPin />} />
-            </Route>
-
-            <Route path="*" element={<NoMatch />} />
-          </Route>
-
-
-
-          {/* Using path="*"" means "match anything", so this route
-          acts like a catch-all for URLs that we don't have explicit
-          routes for. */}
-          <Route path="*" element={<NoMatch />} />
-
-        </Routes>
-      </div>
+      <AppContent />
     </BrowserRouter>
   );
 }
