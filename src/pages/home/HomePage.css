@@ -2,7 +2,7 @@
   padding: 0 var(--space-xl);
   display: flex;
   flex-direction: column;
-  gap: var(--space-xl);
+  gap: 6px;
 }
 
 .home-bottom-spacer {

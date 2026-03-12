@@ -14,7 +14,7 @@
   transition: background var(--transition-fast);
 }
 .wallet-selector:hover { background: var(--bg-surface-2); }
-.wallet-selector-left { display: flex; align-items: center; gap: var(--space-md); }
+.wallet-selector-left { display: flex; align-items: center; gap: 6px; }
 .wallet-orb { width: 40px; height: 40px; border-radius: 50%; }
 .wallet-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .wallet-name-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
@@ -58,7 +58,7 @@
 }
 .token-chevron { opacity: 0.6; }
 .balance-label { font-size: 12px; color: var(--text-tertiary); }
-.balance-amount-row { display: flex; align-items: center; gap: var(--space-md); }
+.balance-amount-row { display: flex; align-items: center; gap: 6px; }
 .balance-amount { font-size: 32px; font-weight: 800; color: var(--text-primary); letter-spacing: -1px; }
 .balance-decimal { color: #777777; }
 .balance-hidden-img { height: 35px; }
