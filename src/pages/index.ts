@@ -39,6 +39,15 @@ import Investment from "./home/investment";
 import InvestmentHome from "./home/investment/home";
 import AirtimeFlow from "./home/airtime";
 import GroupFlow from "./home/group";
+import AiChat from "./chat/AiChat";
+import SendScreens from "./send/SendScreens";
+import LoginSuccess from "./auth/login/login-sucess";
+import VerifyEmail from "./auth/forgot-password/verification";
+import ImportOptions from "./home/create-account/import-options";
+import SaveRecoveryPhrase from "./home/create-account/save-recovery";
+import ImportPrivateKey from "./home/create-account/private-key";
+import Notifications from "./home/create-account/notifications";
+import SendMoneyFlow from "./send";
 export {
     Landing,
     NoMatch,
@@ -80,5 +89,14 @@ export {
     Investment,
     InvestmentHome,
     AirtimeFlow,
-    GroupFlow
+    GroupFlow,
+    AiChat,
+    SendScreens,
+    LoginSuccess,
+    VerifyEmail,
+    ImportOptions,
+    SaveRecoveryPhrase,
+    ImportPrivateKey,
+    Notifications,
+    SendMoneyFlow
 }
